@@ -83,51 +83,10 @@ Terraform modules
 
 Each service repository runs an identical GitHub Actions pipeline:
 
-```
-push to develop / main
-        │
-        ├─► SonarQube static analysis  ─┐
-        ├─► Snyk dependency scan       ─┤ (parallel)
-        │                               │
-        └───────────────────────────────┘
-                        │
-                  Docker Build
-               (artifact saved, no push)
-                        │
-                  Trivy Image Scan
-            (blocks on CRITICAL/HIGH/MEDIUM)
-                        │
-          ┌─────────────┴──────────────┐
-          │ develop branch             │ main branch
-          │                            │
-          ▼                            ▼
-   Push dev-{SHA}          ┌─────────────────────┐
-   tag to ECR dev          │ environment: prod    │
-          │                │ (manual approval)    │
-          │                └──────────┬──────────┘
-          │                           │
-          │                  Push semver + latest
-          │                  to ECR prod
-          │                           │
-          │                  gh release create
-          │                  (auto-generated notes)
-          │                           │
-          └─────────────┬─────────────┘
-                        │
-                 Helm Updater
-           (commits new image tag to
-            Fanvault-GitOps values file)
-                        │
-                   ArgoCD syncs
-              (Kubernetes rolls out
-               new Deployment revision)
-                        │
-          develop only ─┤
-                        ▼
-                  Smoke test
-             (HTTP health check
-              against dev cluster)
-```
+---
+<img width="1024" height="1536" alt="github-image-2" src="https://github.com/user-attachments/assets/dda4c643-63cc-4ac2-8245-5f40e9802a7d" />
+
+---
 
 Prod deployments require a reviewer with access to the `prod` GitHub environment to click **Approve** before the image is pushed or a release is created. The `rollback-run.yml` workflow in each service repo provides a one-click rollback to any previous image tag.
 
