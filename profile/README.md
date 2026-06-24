@@ -19,10 +19,10 @@
 
 ## Architecture Overview
 
-```
+---
 <img width="1392" height="1130" alt="github-image" src="https://github.com/user-attachments/assets/04443c82-0ed5-4f8b-b9df-cdd3e499a819" />
 
-```
+---
 
 ---
 
